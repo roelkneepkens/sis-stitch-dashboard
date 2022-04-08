@@ -10,32 +10,20 @@ export function activate(context: vscode.ExtensionContext) {
 		  vscode.ViewColumn.One,
 		  {}
 		);
-
-		let folders = ['APG eCommerce', 'Australia Post', 'B2C Europe', 'bpost'];
-		
   
 		// And set its HTML content
-		panel.webview.html = getMyWebviewContent(panel.webview, context, folders);   // <--- HTML
+		panel.webview.html = getMyWebviewContent(panel.webview, context);   // <--- HTML
 	  })	
 	);
-  }
- 
-  function getMyWebviewContent(webview: vscode.Webview, context: any, folders: string[]): string { 
+}
+
+  function getMyWebviewContent(webview: vscode.Webview, context: any):string { 
 	let html: string = ``;
 	let foldersHtml: string = ``;
 	
 	const myStyle = webview.asWebviewUri(vscode.Uri.joinPath(
 		  context.extensionUri, 'media', 'style.css'));   // <--- 'media' is the folder where the .css file is stored
 	
-	for (let folder of folders){
-		foldersHtml += `<div class="scenario">
-		<h2>` + folder + `<h2>
-	
-		<h2>ServicesLevel<h2>
-
-		</div>`;
-
-	}
 	
 	// construct your HTML code
 	html += `
@@ -46,15 +34,29 @@ export function activate(context: vscode.ExtensionContext) {
 				</head>
 				<body>
 				  <div class="main"> 
-				  	<h1>Dashboard</h1>
-					  <div class="scenarios">
-						<h1>Scenarios</h1>
-						` + foldersHtml + `
-						</div>
+					<div class="carrier-list">`+ getCarrierList() +` </div>
+					<div class="carrier-detail">`+ getCarrierDetail() +` </div>
 				  </div>
 				</body>
 			 </html>
 	`;
 	// -----------------------
 	return html;
+  }
+
+  function getCarriers(){
+	let folders = ['APG eCommerce', 'Australia Post', 'B2C Europe', 'bpost'];
+	return folders;
+}
+  
+  function getCarrierList(): string {
+	let html1: string = ``;
+	html1 += '<h1>Wouter</h1>';
+	return html1;
+  }
+
+  function getCarrierDetail(): string {
+	let html2: string = ``;
+	html2 += '<h1>Roel</h1>';
+	return html2;
   }
