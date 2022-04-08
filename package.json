@@ -17,7 +17,7 @@
 		"commands": [
 			{
 				"command": "mypanel.start",
-				"title": "Start dashboard"
+				"title": "start dashboard"
 			}
 		]
 	},

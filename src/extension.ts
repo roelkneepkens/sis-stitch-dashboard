@@ -10,18 +10,32 @@ export function activate(context: vscode.ExtensionContext) {
 		  vscode.ViewColumn.One,
 		  {}
 		);
+
+		let folders = ['APG eCommerce', 'Australia Post', 'B2C Europe', 'bpost'];
+		
   
 		// And set its HTML content
-		panel.webview.html = getMyWebviewContent(panel.webview, context);   // <--- HTML
+		panel.webview.html = getMyWebviewContent(panel.webview, context, folders);   // <--- HTML
 	  })	
 	);
   }
  
-  function getMyWebviewContent(webview: vscode.Webview, context: any): string { 
+  function getMyWebviewContent(webview: vscode.Webview, context: any, folders: string[]): string { 
 	let html: string = ``;
+	let foldersHtml: string = ``;
 	
 	const myStyle = webview.asWebviewUri(vscode.Uri.joinPath(
 		  context.extensionUri, 'media', 'style.css'));   // <--- 'media' is the folder where the .css file is stored
+	
+	for (let folder of folders){
+		foldersHtml += `<div class="scenario">
+		<h2>` + folder + `<h2>
+	
+		<h2>ServicesLevel<h2>
+
+		</div>`;
+
+	}
 	
 	// construct your HTML code
 	html += `
@@ -33,20 +47,10 @@ export function activate(context: vscode.ExtensionContext) {
 				<body>
 				  <div class="main"> 
 				  	<h1>Dashboard</h1>
-					  <div>1</div>
-					  <div>2</div>
-					  <div>3</div>
-					<h1>Scenarios</h1>
-					<div class="scenarios">
-					<h2>From<h2>
-					<h2>To<h2>
-					
-					<h2>ServicesLevel<h2>
-
-					<h2>Other Options
-						<li>
-						</li>
-					</div>
+					  <div class="scenarios">
+						<h1>Scenarios</h1>
+						` + foldersHtml + `
+						</div>
 				  </div>
 				</body>
 			 </html>

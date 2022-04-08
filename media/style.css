@@ -1,17 +1,19 @@
 .main {
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: center;
 }
 
 .main div {
-    display: flex;
+    /* display: left; */
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     width: 100px;
     height: 100px;
 }
-
+.scenarios div{
+     float: left;
+}
 .h1 {
-    color:lightcoral
+    color:lightcoral;
 }
