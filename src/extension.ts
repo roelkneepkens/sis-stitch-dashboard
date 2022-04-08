@@ -106,6 +106,16 @@ export function activate(context: vscode.ExtensionContext) {
 
   function getCarrierDetail(): string {
 	let html2: string = ``;
-	html2 += '<h1>Roel</h1>';
+	html2 	+= ` 
+	<div class="header">
+		<h1>Details</h1>
+	</div>
+	<div class="navbar">
+		<a class="active" href="#lanes">Lanes</a>
+		<a href="#implementation">Implementation</a>
+		<a href="#specifications">Specifications</a>
+	</div>
+	`;
+
 	return html2;
   }
