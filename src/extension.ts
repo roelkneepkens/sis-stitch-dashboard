@@ -26,24 +26,74 @@ export function activate(context: vscode.ExtensionContext) {
 		  context.extensionUri, 'media', 'style.css'));   // <--- 'media' is the folder where the .css file is stored
 	
 	let carrierlist = await renderCarrierList();
+	let labelaryData = await getLabelaryData();
 	// construct your HTML code
 	html += `
 			<!DOCTYPE html>
 			<html>
-				<head>
-				  <link href="${myStyle}" rel="stylesheet" />   
-				</head>
 				<body>
-				  <div class="main"> 
-					<div class="carrier-list">`+ carrierlist +` </div>
-					<div class="carrier-detail">`+ getCarrierDetail() +` </div>
-				  </div>
+				From Labelary:
+				  <embed width="100%" height="100%" src="data:application/pdf;base64,${labelaryData}" alt="red dot"/> 
+				  <object width="100%" height="100%" src="data:application/pdf;base64,${labelaryData}" type="application/pdf" alt="red dot"></object>
+				  response='${labelaryData}'
 				</body>
 			 </html>
 	`;
 	// -----------------------
 	return html;
   }
+
+
+ async function getLabelaryData(): Promise<string> {
+
+	//   basestring = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
+	let basestring = await getPDFFromLabelary();
+
+	  return basestring;
+  }
+
+  //see https://bobbyhadz.com/blog/typescript-http-request
+  import axios from 'axios';
+
+  
+  async function getPDFFromLabelary():Promise<string> {
+
+	let zpl:string = '^xa^cfa,50^fo100,100^fdHello World^fs^xz';
+
+
+	//const {data:pdf} = await axios.post('http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0', zpl, { headers })
+	const {data: pdf} = await axios({
+		method: "POST",
+		data: zpl,
+		url: 'http://api.labelary.com/v1/printers/8dpmm/labels/4x6/0',
+			responseType: "arraybuffer",
+			responseEncoding: "binary",
+			headers:{
+				'Content-type': 'application/x-www-form-urlencoded',
+				'Accept': 'application/pdf'
+			}
+		});
+	
+		const result =  Buffer.from(pdf).toString("base64");
+	return result;
+
+};
+  
+  
+
+  function getBase64(finData:string) {
+	
+	// let reader = new FileReader();
+	// reader.reading(finData);
+	// reader.onload = function () {
+	//   //me.modelvalue = reader.result;
+	//   return reader.result;
+	// };
+	return finData;
+ }
+ 
+
+
 
   function getCarriers(){
 	let folders = ['DHL', 'DPD', 'UPS'];
