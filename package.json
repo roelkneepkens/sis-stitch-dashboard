@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "filereader": "^0.10.3",
     "node-fetch": "^2.6.1"
   }
 }
