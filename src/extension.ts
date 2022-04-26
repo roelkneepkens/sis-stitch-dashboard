@@ -29,8 +29,29 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	const myStyle = webview.asWebviewUri(vscode.Uri.joinPath(
 		  context.extensionUri, 'media', 'style.css'));   // <--- 'media' is the folder where the .css file is stored
-	let zpl:string = '^xa^cfa,50^fo100,100^fdHello World label1^fs^xz^xa^cfa,50^fo100,100^fdHello World label2^fs^xz';
+	let zpl:string = '^xa^cfa,50^fo100,100^fdHello World label1^fs^xz^xa';
+	const editor = vscode.window.activeTextEditor;
+
+		if (editor) {
+			const document = editor.document;
+			const selection = editor.selection;
+
+			// Get the word within the selection
+			zpl = document.getText(selection);
+			
+		}
+	if (zpl === ''){
+		zpl = '^XA^CFA,20^FO100,100^FDBefore starting the extension:^FS^FO100,120^FDPlease select the text to convert with labelary.^FS^XZ';
+	}
+
 	let labelArray:string[] = getLabelArray(zpl);
+	let labelCount = labelArray.length;
+	let selectorDots:string = '';
+	labelArray.forEach((value, index) => {
+		selectorDots +='<span class="dot" onclick="currentSlide(' + (index + 1) + ')"></span>';
+	});
+
+
 	let labelaryData = await getLabelaryData(labelArray);
 	// construct your HTML code
 	html += `<!DOCTYPE html>
@@ -130,7 +151,6 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			</style>
 				<body>
-				From Labelary:
 				<!-- Slideshow container -->
 				<div class="slideshow-container">
 
@@ -138,7 +158,7 @@ export function activate(context: vscode.ExtensionContext) {
 					${labelaryData}
 					<!-- 
 					<div class="mySlides fade">
-						<div class="numbertext">1 / 3</div>
+						<div class="numbertext">1 / ${labelCount}</div>
 						<img src="img1.jpg" style="width:100%">
 						<div class="text">Caption Text</div>
 					</div>
@@ -152,9 +172,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				<!-- The dots/circles -->
 				<div style="text-align:center">
-					<span class="dot" onclick="currentSlide(1)"></span>
-					<span class="dot" onclick="currentSlide(2)"></span>
-					<span class="dot" onclick="currentSlide(3)"></span>
+					${selectorDots}
 				</div>
 				  <script>
 				  let slideIndex = 1;
